@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My webpage</title>
+    
+</head>
+
+<body>
+    <div id="weather container" style="text-align: center;"></div>
+    <script> 
+    var mydiv = document.getElementById("weather container")
+
+    
+    
+  async function weather(Location) {
+
+    var res = await fetch("https://api.openweathermap.org/data/2.5/weather?" + "lat=" + Location[0] +"&lon=" + Location[1] + "&appid=175ef17dee299b440dfa8dd90618c852");
+
+    var data = await res.json();
+    console.log(data);
+
+    alert("Weather  :  " + data.weather[0].description + "   Temp :  " + data.main.temp);
+  
+}
+async function getAllcountry() {
+  
+    var res = await fetch("https://restcountries.eu/rest/v2/all");
+
+    var data = await res.json();
+
+    for (let index = 0; index < data.length; index++) {
+
+      var countrygrid = document.createElement("div");
+      countrygrid.style.border="2px solid black";
+      countrygrid.style.textAlign="center";
+      countrygrid.style.display="inline-block";
+      countrygrid.style.marginLeft="50px";
+      countrygrid.style.marginTop="20px";
+      
+      
+      //country style
+      countrygrid.style.width = "20em";
+
+      countrygrid.setAttribute("class","country");
+      
+      //country name
+      var par = document.createElement("p");
+      par.setAttribute("class","countryname");
+      par.innerText = data[index].name;
+      
+
+      //country flag
+      var imag = document.createElement("img");
+      imag.setAttribute("class","countryflag");
+      imag.src = data[index].flag;
+      imag.alt = "flag";
+      imag.style.width="300px";
+      imag.style.height="300px";
+
+      
+      //country details
+
+      var body1 = document.createElement("div");
+      body1.setAttribute("class","countrybody");
+
+      var body2 = document.createElement("div");
+      body2.setAttribute("class","countrybody");
+
+
+      var button = document.createElement("button");
+      button.setAttribute("class","submitbutton");
+
+      button.innerText = " Weather";
+      
+
+      button.onclick = async function () {
+        await weather(data[index].latlng);
+        
+      }
+
+
+      var countryCode = "Country Code: "+data[index].alpha3Code;
+      var countryRegion = "Country Region: "+data[index].region;
+      var countryCapital = "Country Capital: "+data[index].capital;
+
+      var p7 = document.createElement("p");
+      p7.setAttribute("class","par");
+      var p8 = document.createElement("p");
+      p8.setAttribute("class","par");
+      var p9 = document.createElement("p");
+      p9.setAttribute("class","par");
+
+      p7.innerText = countryCode;
+      p8.innerText = countryCapital;
+      p9.innerText = countryRegion;
+
+      body1.append(p7,p8,p9);
+      body2.append(body1, button);
+      countrygrid.append(par, imag, body2);
+
+      mydiv.appendChild(countrygrid);
+      
+
+      
+    }
+  }
+  getAllcountry();
+    </script>
+
+</body>
+</html>
